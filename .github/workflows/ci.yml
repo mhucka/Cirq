@@ -17,10 +17,12 @@ jobs:
     name: Misc check
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Misc
         run: check/misc
@@ -28,10 +30,12 @@ jobs:
     name: Packaging test
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install dependencies
         run: pip install -r dev_tools/requirements/deps/packaging.txt
@@ -41,12 +45,14 @@ jobs:
     name: Format check
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install dependencies
         run: pip install -r dev_tools/requirements/deps/format.txt
@@ -56,10 +62,12 @@ jobs:
     name: Type check
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install mypy
         run: pip install -r dev_tools/requirements/mypy.env.txt
@@ -69,12 +77,14 @@ jobs:
     name: Changed files test
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install changed files test dependencies
         run: dev_tools/conf/pip-install-minimal-for-pytest-changed-files.sh
@@ -84,10 +94,12 @@ jobs:
     name: Lint check
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install pylint
         run: pip install -r dev_tools/requirements/pylint.env.txt
@@ -99,25 +111,29 @@ jobs:
     name: Doc test
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install requirements
         run: pip install -r dev_tools/requirements/dev.env.txt
       - name: RST check
-        run: find . -type f -name "*.rst" | xargs rstcheck --report warning --ignore-directives autoclass,automodule
+        run: find . -type f -name "*.rst" | xargs rstcheck
       - name: Doc check
         run: check/doctest -q
   nbformat:
     name: Notebook formatting
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install requirements
         run: pip install -r dev_tools/requirements/deps/tensorflow-docs.txt
@@ -127,7 +143,8 @@ jobs:
     name: Shell check
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - name: Run shellcheck
@@ -136,28 +153,33 @@ jobs:
     name: Isolated pytest Ubuntu
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install dependencies
         run: pip install -r dev_tools/requirements/isolated-base.env.txt
       - name: Test each module in isolation
-        run: pytest -n auto -m slow dev_tools/packaging/isolated_packages_test.py
+        run: pytest -n auto --enable-slow-tests dev_tools/packaging/isolated_packages_test.py
   pytest:
     name: Pytest Ubuntu
     strategy:
       matrix:
-        python-version: [ '3.9', '3.10', '3.11' ]
+        python-version: ['3.10', '3.11', '3.12']
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
-      - uses: actions/cache@v4
+      - name: Set up caching of dependencies
+        uses: actions/cache@v4
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-${{ hashFiles('**/requirements.txt', 'dev_tools/requirements/**/*.txt') }}
@@ -166,19 +188,47 @@ jobs:
           pip install wheel
           pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
       - name: Run Quil dependencies
-        run: docker-compose -f cirq-rigetti/docker-compose.test.yaml up -d
+        run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
       - name: Pytest check
         run: check/pytest -n auto --durations=20 --ignore=cirq-core/cirq/contrib --rigetti-integration
       - name: Stop Quil dependencies
-        run: docker-compose -f cirq-rigetti/docker-compose.test.yaml down
+        run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
+  # TODO(#6706) remove after we start using NumPy 2.0 in regular pytest
+  pytest-numpy-2:
+    name: Pytest Ubuntu with NumPy-2
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.11', '3.12']
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: 'x64'
+      - name: Set up caching of dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.pythonLocation }}
+          key: ${{ env.pythonLocation }}-${{ hashFiles('**/requirements.txt', 'dev_tools/requirements/**/*.txt') }}
+      - name: Install requirements
+        run: |
+          pip install wheel
+          pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev-np2.env.txt
+      - name: Pytest check
+        run: check/pytest -n auto --warn-numpy-data-promotion --durations=20 --ignore=cirq-rigetti
   pip-compile:
     name: Check consistency of requirements
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install requirements
         run: pip install pip-tools
@@ -189,30 +239,35 @@ jobs:
     name: Build protos
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install requirements
         run: |
           pip install -r dev_tools/requirements/deps/protos.txt
       - name: Build protos
-        run: check/build-changed-protos
+        run: check/protos-up-to-date
   coverage:
     name: Coverage check
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
-      - uses: actions/cache@v4
+      - name: Set up caching of dependencies
+        uses: actions/cache@v4
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-${{ hashFiles('**/requirements.txt', 'dev_tools/requirements/**/*.txt') }}
@@ -221,7 +276,7 @@ jobs:
           pip install wheel
           pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
       - name: Run Quil dependencies
-        run: docker-compose -f cirq-rigetti/docker-compose.test.yaml up -d
+        run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
       - name: Coverage check
         run: check/pytest-and-incremental-coverage -n auto --rigetti-integration
       - name: Upload coverage reports to Codecov
@@ -229,20 +284,23 @@ jobs:
         env:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       - name: Stop Quil dependencies
-        run: docker-compose -f cirq-rigetti/docker-compose.test.yaml down
+        run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
   windows:
     name: Pytest Windows
     strategy:
       matrix:
-        python-version: [ '3.9', '3.10', '3.11' ]
+        python-version: ['3.10', '3.11', '3.12']
     runs-on: windows-2019
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
-      - uses: actions/cache@v4
+      - name: Set up caching of dependencies
+        uses: actions/cache@v4
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-${{ hashFiles('**/requirements.txt', 'dev_tools/requirements/**/*.txt') }}
@@ -259,15 +317,19 @@ jobs:
     name: Pytest MacOS
     strategy:
       matrix:
-        python-version: [ '3.9', '3.10', '3.11' ]
-    runs-on: macos-latest
+        python-version: ['3.10', '3.11', '3.12']
+    # TODO(#6577): upgrade to macos-latest when it runs Python 3.10
+    runs-on: macos-13
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
           architecture: 'x64'
-      - uses: actions/cache@v4
+      - name: Set up caching of dependencies
+        uses: actions/cache@v4
         with:
           path: ${{ env.pythonLocation }}
           key: ${{ env.pythonLocation }}-${{ hashFiles('**/requirements.txt', 'dev_tools/requirements/**/*.txt') }}
@@ -287,18 +349,21 @@ jobs:
         partition: [partition-0, partition-1, partition-2, partition-3]
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - uses: actions/setup-python@v5
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install requirements
         run: pip install -r dev_tools/requirements/isolated-base.env.txt
       - name: Notebook tests
         run: check/pytest -n auto -m slow dev_tools/notebooks/isolated_notebook_test.py -k ${{matrix.partition}}
-      - uses: actions/upload-artifact@v4
+      - name: Persist the outputs
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: notebook-outputs
@@ -307,16 +372,19 @@ jobs:
     name: Notebook Tests against PR
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Python environment
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.9'
+          python-version: '3.10'
           architecture: 'x64'
       - name: Install requirements
         run: pip install -r dev_tools/requirements/notebooks.env.txt
       - name: Notebook tests
         run: check/pytest -n auto -m slow dev_tools/notebooks/notebook_test.py
-      - uses: actions/upload-artifact@v4
+      - name: Persist the outputs
+        uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: notebook-outputs
@@ -325,11 +393,13 @@ jobs:
     name: Bundle file consistency
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
         with:
-          node-version: '14.16.1'
-      - name: Install npm
+          node-version: '20.17.0'
+      - name: Install node dependencies
         run: check/npm ci
       - name: Check build matches the current
         run: check/ts-build-current
@@ -337,37 +407,43 @@ jobs:
     name: Typescript lint check
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
         with:
-          node-version: '14.16.1'
-      - name: Install npm
+          node-version: '20.17.0'
+      - name: Install node dependencies
         run: check/npm ci
-      - name: Lint
+      - name: Lint Typescript files
         run: check/ts-lint
   ts-test:
     name: Typescript tests
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
         with:
-          node-version: '14.16.1'
-      - name: Install npm dependencies
+          node-version: '20.17.0'
+      - name: Install node dependencies
         run: check/npm ci
-      - name: Unit tests
+      - name: Run unit tests
         run: check/ts-test
-      - name: End to end tests
+      - name: Run end-to-end tests
         run: check/ts-test-e2e
   ts-coverage:
     name: Typescript tests coverage
     runs-on: ubuntu-20.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Check out source repository
+        uses: actions/checkout@v4
+      - name: Set up Node environment
+        uses: actions/setup-node@v4
         with:
-          node-version: '14.16.1'
-      - name: Install npm dependencies
+          node-version: '20.17.0'
+      - name: Install node dependencies
         run: check/npm ci
-      - name: Test
+      - name: Run coverage test
         run: check/ts-coverage

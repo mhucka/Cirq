@@ -19,6 +19,8 @@ import numpy as np
 import sympy
 from google.protobuf import json_format
 
+import tunits.units
+
 import cirq
 import cirq_google as cg
 from cirq_google.api import v2
@@ -79,11 +81,11 @@ OPERATIONS = [
         op_proto({'xpowgate': {'exponent': {'float_value': 0.125}}, 'qubit_constant_index': [0]}),
     ),
     (
-        cirq.XPowGate(exponent=np.double(0.125))(Q1),  # type: ignore
+        cirq.XPowGate(exponent=np.double(0.125))(Q1),
         op_proto({'xpowgate': {'exponent': {'float_value': 0.125}}, 'qubit_constant_index': [0]}),
     ),
     (
-        cirq.XPowGate(exponent=np.short(1))(Q1),  # type: ignore
+        cirq.XPowGate(exponent=np.short(1))(Q1),
         op_proto({'xpowgate': {'exponent': {'float_value': 1.0}}, 'qubit_constant_index': [0]}),
     ),
     (
@@ -234,6 +236,19 @@ OPERATIONS = [
         op_proto(
             {
                 'fsimgate': {'theta': {'float_value': 2.0}, 'phi': {'float_value': 1.0}},
+                'qubit_constant_index': [0, 1],
+            }
+        ),
+    ),
+    (
+        cirq.FSimGate(theta=2, phi=1)(Q0, Q1).with_tags(cg.FSimViaModelTag()),
+        op_proto(
+            {
+                'fsimgate': {
+                    'theta': {'float_value': 2.0},
+                    'phi': {'float_value': 1.0},
+                    'translate_via_model': True,
+                },
                 'qubit_constant_index': [0, 1],
             }
         ),
@@ -728,3 +743,22 @@ def test_circuit_with_couplerpulse():
     circuit = cirq.Circuit(cg.experimental.CouplerPulse(cirq.Duration(nanos=1), 2)(Q0, Q1))
     msg = cg.CIRCUIT_SERIALIZER.serialize(circuit)
     assert cg.CIRCUIT_SERIALIZER.deserialize(msg) == circuit
+
+
+def test_circuit_with_dd_tag():
+    tag = cg.ops.DynamicalDecouplingTag('X')
+    c = cirq.Circuit(cirq.X(cirq.q(0)).with_tags(tag))
+    msg = cg.CIRCUIT_SERIALIZER.serialize(c)
+    nc = cg.CIRCUIT_SERIALIZER.deserialize(msg)
+    assert c == nc
+    assert nc[0].operations[0].tags == (tag,)
+
+
+def test_circuit_with_units():
+    c = cirq.Circuit(
+        cg.InternalGate(
+            gate_module='test', gate_name='test', parameter_with_unit=3.14 * tunits.units.ns
+        )(cirq.q(0, 0))
+    )
+    msg = cg.CIRCUIT_SERIALIZER.serialize(c)
+    assert c == cg.CIRCUIT_SERIALIZER.deserialize(msg)

@@ -19,7 +19,7 @@ import sympy
 
 import cirq
 from cirq_google.api import v2
-from cirq_google.ops import PhysicalZTag, InternalGate
+from cirq_google.ops import PhysicalZTag, InternalGate, FSimViaModelTag, DynamicalDecouplingTag
 from cirq_google.ops.calibration_tag import CalibrationTag
 from cirq_google.experimental.ops import CouplerPulse
 from cirq_google.serialization import serializer, op_deserializer, op_serializer, arg_func_langs
@@ -223,6 +223,8 @@ class CircuitSerializer(serializer.Serializer):
             arg_func_langs.float_arg_to_proto(
                 gate.phi, out=msg.fsimgate.phi, arg_function_language=arg_function_language
             )
+            if any(isinstance(tag, FSimViaModelTag) for tag in op.tags):
+                msg.fsimgate.translate_via_model = True
         elif isinstance(gate, cirq.MeasurementGate):
             arg_func_langs.arg_to_proto(
                 gate.key, out=msg.measurementgate.key, arg_function_language=arg_function_language
@@ -294,6 +296,8 @@ class CircuitSerializer(serializer.Serializer):
                     constants.append(constant)
                     if raw_constants is not None:
                         raw_constants[tag.token] = msg.token_constant_index
+            elif isinstance(tag, DynamicalDecouplingTag):
+                tag.to_proto(msg=msg.tags.add().dynamical_decoupling)
         return msg
 
     def _serialize_circuit_op(
@@ -415,13 +419,14 @@ class CircuitSerializer(serializer.Serializer):
         for moment_proto in circuit_proto.moments:
             moment_ops = []
             for op in moment_proto.operations:
+                tags = [self._deserialize_tag(tag) for tag in op.tags]
                 moment_ops.append(
                     self._deserialize_gate_op(
                         op,
                         arg_function_language=arg_function_language,
                         constants=constants,
                         deserialized_constants=deserialized_constants,
-                    )
+                    ).with_tags(*tags)
                 )
             for op in moment_proto.circuit_operations:
                 moment_ops.append(
@@ -601,6 +606,8 @@ class CircuitSerializer(serializer.Serializer):
                 op = cirq.FSimGate(theta=theta, phi=phi)(*qubits)
             else:
                 raise ValueError('theta and phi must be specified for FSimGate')
+            if operation_proto.fsimgate.translate_via_model:
+                op = op.with_tags(FSimViaModelTag())
         elif which_gate_type == 'measurementgate':
             key = arg_func_langs.arg_from_proto(
                 operation_proto.measurementgate.key,
@@ -732,6 +739,12 @@ class CircuitSerializer(serializer.Serializer):
             constants=constants,
             deserialized_constants=deserialized_constants,
         )
+
+    def _deserialize_tag(self, msg: v2.program_pb2.Tag):
+        which = msg.WhichOneof('tag')
+        if which == 'dynamical_decoupling':
+            return DynamicalDecouplingTag.from_proto(msg.dynamical_decoupling)
+        raise ValueError(f'unsupported tag {msg=}')  # pragma: no cover
 
 
 CIRCUIT_SERIALIZER = CircuitSerializer()

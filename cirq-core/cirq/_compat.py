@@ -69,13 +69,11 @@ TFunc = TypeVar('TFunc', bound=Callable)
 
 
 @overload
-def cached_method(__func: TFunc) -> TFunc:
-    ...
+def cached_method(__func: TFunc) -> TFunc: ...
 
 
 @overload
-def cached_method(*, maxsize: int = 128) -> Callable[[TFunc], TFunc]:
-    ...
+def cached_method(*, maxsize: int = 128) -> Callable[[TFunc], TFunc]: ...
 
 
 def cached_method(method: Optional[TFunc] = None, *, maxsize: int = 128) -> Any:
@@ -193,6 +191,9 @@ def proper_repr(value: Any) -> str:
 
     if hasattr(value, "__qualname__"):
         return f"{value.__module__}.{value.__qualname__}"
+
+    if isinstance(value, np.number):
+        return str(value)
 
     return repr(value)
 

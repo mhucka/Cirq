@@ -221,9 +221,11 @@ class CircuitDiagramInfoArgs:
             self.known_qubit_count,
             self.use_unicode_characters,
             self.precision,
-            None
-            if self.label_map is None
-            else tuple(sorted(self.label_map.items(), key=lambda e: e[0])),
+            (
+                None
+                if self.label_map is None
+                else tuple(sorted(self.label_map.items(), key=lambda e: e[0]))
+            ),
             self.include_tags,
             self.transpose,
         )
@@ -275,6 +277,8 @@ class CircuitDiagramInfoArgs:
         if self.precision is not None and not isinstance(radians, sympy.Basic):
             quantity = self.format_real(radians / np.pi)
             return quantity + unit
+        if isinstance(radians, np.number):
+            return str(radians)
         return repr(radians)
 
     def copy(self):
@@ -354,7 +358,7 @@ def _op_info_with_fallback(
 
     # Add tags onto the representation, if they exist
     if op.tags:
-        name += f'{list(op.tags)}'
+        name += f"[{', '.join(map(str, op.tags))}]"
 
     # Include ordering in the qubit labels.
     symbols = (name,) + tuple(f'#{i + 1}' for i in range(1, len(op.qubits)))

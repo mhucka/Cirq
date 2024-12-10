@@ -120,6 +120,7 @@ def _class_resolver_dictionary() -> Dict[str, ObjectFactory]:
         'CliffordState': cirq.CliffordState,
         'CliffordTableau': cirq.CliffordTableau,
         'CNotPowGate': cirq.CNotPowGate,
+        'Concat': cirq.Concat,
         'ConstantQubitNoiseModel': cirq.ConstantQubitNoiseModel,
         'ControlledGate': cirq.ControlledGate,
         'ControlledOperation': cirq.ControlledOperation,
@@ -157,6 +158,7 @@ def _class_resolver_dictionary() -> Dict[str, ObjectFactory]:
         'LineTopology': cirq.LineTopology,
         'Linspace': cirq.Linspace,
         'ListSweep': cirq.ListSweep,
+        'cirq.MSGate': cirq.MSGate,
         'MatrixGate': cirq.MatrixGate,
         'MixedUnitaryChannel': cirq.MixedUnitaryChannel,
         'MeasurementKey': cirq.MeasurementKey,
@@ -246,6 +248,7 @@ def _class_resolver_dictionary() -> Dict[str, ObjectFactory]:
         'ZipLongest': cirq.ZipLongest,
         'ZPowGate': cirq.ZPowGate,
         'ZZPowGate': cirq.ZZPowGate,
+        'UniformSuperpositionGate': cirq.UniformSuperpositionGate,
         # Old types, only supported for backwards-compatibility
         'BooleanHamiltonian': _boolean_hamiltonian_gate_op,  # Removed in v0.15
         'CrossEntropyResult': _cross_entropy_result,  # Removed in v0.16
