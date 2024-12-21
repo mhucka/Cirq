@@ -51,7 +51,7 @@ We will explore these phases one by one.
 Triage states are 
 
 * `triage/accepted` - there is consensus amongst maintainers that this is a real bug or a reasonable feature to add with a reasonable design, hence it is ready to be implemented.
-* `triage/discuss` - can be applied to any of the issue types to bring them up during our weekly Cirq Cynque meeting (join [cirq-dev](https://groups.google.com/g/cirq-dev)) to get an invite!) and/or to signal need for decision. If you mark an issue with triage/discuss, consider pinging the maintainers on the issue who need to come to consensus around the issue. 
+* `triage/discuss` - can be applied to any of the issue types to bring them up during our biweekly Cirq Cynque meeting (join [cirq-dev](https://groups.google.com/g/cirq-dev)) to get an invite!) and/or to signal need for decision. If you mark an issue with triage/discuss, consider pinging the maintainers on the issue who need to come to consensus around the issue. 
 * `triage/needs-reproduction` - for bugs only
 * `triage/needs-feasibility` - for feature requests (maybe bugs).
 * `triage/needs-more-evidence` - for feature requests - the feature request seems plausible but we need more understanding if it is valuable for enough users to warrant implementing and maintaining it. 
@@ -146,7 +146,7 @@ Issues should be automatically closed by PRs using the `Fixes #XYZD.` phrase in 
 
 - Bugs and Feature requests in states `triage/needs-reproduction` and `triage/needs-design-work`, i.e. where the author is required to provide more details get an automated comment "*This issue has not received any updates in 30 days*" and then is marked as `triage/stale` after 60 days and are closed. 
 - Documentation (`kind/docs`) issues **without** `triage/accepted` or `triage/discuss` are subject to 60 days staleness policy as well. 
-- Roadmap-items and Tasks, and issues in `triage/accepted` or `triage/discuss` state never get stale automatically, they are subject to review during daily / weekly triage and the twice a year **Bug Smash**.
+- Roadmap-items and Tasks, and issues in `triage/accepted` or `triage/discuss` state never get stale automatically, they are subject to review during regular triage and the twice a year **Bug Smash**.
 
 To summarize, **all issues** are subject to staleness-check, **except** the following:
 
@@ -194,7 +194,7 @@ Pull requests:
 
 * As a triager it is your responsibility to review as many PRs as possible during your triage week. 
 
-### Weekly discussions
+### Biweekly discussions
 
 **Goals**
 
@@ -208,11 +208,11 @@ Pull requests:
 
 **When:**
 
-* 11:00AM-12:00PM PST Wednesdays 
+* 11:00AM-12:00PM PST every other Wednesday. 
 
 **What:**
 
-Cirq Cynque should be the place to discuss 
+Cirq Cynq should be the place to discuss 
 
 * as much of the `triage/discuss` items as possible and make decisions about controversial bugs and feature requests. 
 * **prioritization requests** - stakeholders, like quantum platform providers, research teams should be able to advocate for raising the priority of certain items
