@@ -89,7 +89,7 @@ or internal Google systems.
 
 0. Make sure you have python 3.10.0 or greater.
 
-    See [Installing Python 3 on Mac OS X](https://docs.python-guide.org/starting/install3/osx/) @ the hitchhiker's guide to python.
+    See [Installing Python 3 on MacOS](https://docs.python-guide.org/starting/install3/osx/) @ the hitchhiker's guide to python.
 
 1. Consider using a [virtual environment](https://packaging.python.org/guides/installing-using-pip-and-virtual-environments/).
 

@@ -35,7 +35,7 @@ and one of the maintainers will flag the issue as a major feature if necessary.
 1. Before submitting an RFC, discuss your aims with project contributors and maintainers and get early feedback. \
 Open a [feature request](https://github.com/quantumlib/Cirq/issues/new?assignees=&labels=kind%2Ffeature-request&template=feature_request.md&title=) \
 and have a discussion with the maintainers. Mention that you are willing to write an RFC.
-2. [Join the cirq-dev Google Group](https://groups.google.com/forum/#!forum/cirq-dev) to get an invitation to our weekly Cirq Cynq meeting. 
+2. [Join the cirq-dev Google Group](https://groups.google.com/forum/#!forum/cirq-dev) to get an invitation to our biweekly Cirq Cynq meeting. 
 3. Draft your RFC. 
     * Follow the [RFC template](https://tinyurl.com/cirq-rfc-template), link the GitHub issue in your RFC.
     * Make sure to share your doc with cirq-dev@googlegroups.com for comments.
@@ -112,7 +112,7 @@ An approved RFC is not a commitment to implementation on any sort of timeline. T
 
 Several hardware vendors already have integrations with cirq.
 If you are considering integrating with cirq, please engage with us through the
-cirq-maintainer team by attending the weekly cirq cync meeting and submitting
+cirq-maintainer team by attending the biweekly Cirq Cynq meeting and submitting
 an RFC to get feedback on your design proposal (as specified above). The goal of the RFC
 review process is to ensure all integrations end up with a well-maintained, user
 friendly interface with a high reliability.
