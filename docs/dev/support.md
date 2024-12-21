@@ -15,16 +15,13 @@ the provided template and/or contributing guidelines. Thanks for helping
 improve open-source quantum software!
 
 
-# Weekly developer meetings
+# Biweekly developer meetings
 
-You may also be interested to join the bi-weekly
-[Cirq sync](https://groups.google.com/g/cirq-dev/about) with Cirq developers and
-contributors. There are also syncs for
-[OpenFermion](https://groups.google.com/g/openfermion-dev/about),
-[qsim](https://groups.google.com/g/qsim-qsimh-dev/about), and
-[TensorFlow Quantum](https://groups.google.com/g/tfq-dev/about).
+You may also be interested to join the biweekly
+[Cirq Cynq](https://groups.google.com/g/cirq-dev/about) with Cirq developers and
+contributors.
 
 # Questions
 
 If you're not sure whether a certain behavior is buggy, or if you have other questions,
-please ask us in the bi-weekly cirq cync meeting.
+please ask us in the biweekly Cirq Cync meeting.
