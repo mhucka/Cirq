@@ -4,8 +4,8 @@ Below is info on how we version releases, and how the releases
 themselves are created. Note that development is done on the `main`
 branch, so if you want to use a more stable version you should use one
 of the [releases](https://github.com/quantumlib/Cirq/releases) or
-install from pypi using `pip install cirq`.  The release from the
-latest commit to main can be installed with `pip install cirq~=1.0.dev`.
+install from PyPI using `pip install cirq`.  The release from the
+latest commit to main can be installed with `pip install cirq~=1.5.dev`.
 
 ## Versioning
 
@@ -16,7 +16,7 @@ is a numerical value. The following guarantees are provided:
 1. All packages released at the same time from the Cirq repository will share
    the same [Semantic Versioning 2.0.0](https://semver.org/) number.
    1. Packages may have different version numbers in the future, at which point
-      this policy will be updated.
+       this policy will be updated.
 2. Libraries in the `cirq-core` directory (with the exception of
    `cirq-core/cirq/contrib`) adhere to the guarantees outlined in the Semantic
    Versioning specification. In summary: “Bug fixes not affecting the API
@@ -39,7 +39,7 @@ is a numerical value. The following guarantees are provided:
       changes to its public API.
    2. For each vendor directory, version policies may be modified to strictly
       follow Semantic Versioning in the future.
-5. Versions based on unreleased branches of main will be suffixed with ".dev".
+5. Versions based on unreleased branches of main will be suffixed with `.dev`.
 
 The rules for version changes are:
 * Increment the PATCH version if all changes are bug fixes only.
@@ -54,38 +54,40 @@ directories that prohibit them for a minor version increment.
 
 ## Releases
 
-We use github's release system for creating releases.  Release are listed
+We use GitHub's release system for creating releases.  Releases are listed
 [on the Cirq release page](https://github.com/quantumlib/Cirq/releases).
 
-Our development process uses the `main` branch for development.
-Master will always use the next unreleased minor version with the suffix
-of ".dev".  When a release is performed, the ".dev" will be removed and tagged
-in a release branch with a version tag (vX.X.X).  Then, main will be updated
-to the next minor version.  This can always be found in the
-[version file](./cirq-core/cirq/_version.py).
+Our development process uses the `main` branch for development. The `main`
+branch will always use the next unreleased minor version with the suffix of
+`.dev`. When a release is performed, the `.dev` will be removed and tagged in
+a release branch with a version tag (vX.X.X). Then, main will be updated to
+the next minor version. This can always be found in the [version
+file](./cirq-core/cirq/_version.py).
 
 ### Release Schedule
+
 Releases are made on an as-needed basis determined by Cirq maintainers. All Cirq
 packages (including vendor packages such as `cirq-aqt`) are released at the same
 time.
 
 ## Before you release: flush the deprecation backlog
 
-Ensure that all the deprecations are removed that were meant to be deprecated for the given release. 
-E.g. if you want to release `v0.11`, you can check with `git grep 'v0.11'` for all the lines containing this deadline.
-Make sure none of those are released.  
+Ensure that all the deprecations are removed that were meant to be deprecated
+for the given release. E.g. if you want to release `v0.11`, you can check with
+`git grep 'v0.11'` for all the lines containing this deadline. Make sure none
+of those are released.
 
 ## Release Procedure
 
-This procedure can be followed by authorized cirq developers to perform a
+This procedure can be followed by authorized Cirq developers to perform a
 release.
 
 ### Preparation
 
-System requirements: Linux, python3.10
+System requirements: Linux, Python 3.10.
 
-For MINOR / MAJOR release: Make sure you're on an up-to-date main branch and 
-in cirq's root directory.
+For MINOR / MAJOR release: Make sure you're on an up-to-date `main` branch and
+in Cirq's root directory.
 
 ```bash
 git checkout main
@@ -93,7 +95,7 @@ git pull origin main  # or upstream main
 git status  # should be no pending changes
 ```
 
-For PATCH update: Make sure you checked out the version you want to patch. 
+For PATCH update: make sure you checked out the version you want to patch. 
 Typically this will be something like `${MAJOR}.${MINOR}.${LAST_PATCH}` 
 
 ```bash
@@ -102,11 +104,13 @@ git checkout <desired tag to patch>
 git status  # should be no pending changes
 ```
 
-Ensure you have pypi and test pypi accounts with access to cirq distribution.
-This can be done by visiting test.pypi.org, logging in, and accessing the cirq
-distribution.
+Ensure you have [pypi.org](https://pypi.org) and
+[test.pypi.org](https://test.pypi.org) accounts with access to the [Cirq
+project on PyPI](https://pypi.org/project/cirq). This can be done by visiting
+[test.pypi.org](https://test.pypi.org), logging in, and accessing the Cirq
+project.
 
-For the following script to work, you will need the following env variables
+For the following script to work, you will need the following environment variables
 defined: `TEST_TWINE_USERNAME`, `TEST_TWINE_PASSWORD`, `PROD_TWINE_USERNAME`,
 `PROD_TWINE_PASSWORD`.
 
@@ -122,13 +126,13 @@ NEXT_VER=NEXT_VERSION  # e.g. "0.8.0" (skip for PATCH releases)
 
 ### Create release branch
 
-Create a release branch called "v${VERSION}-dev":
+Create a release branch called `v${VERSION}-dev`:
 
 ```bash
 git checkout -b "v${VER}-dev"
 ```
 
-If you are doing a PATCH update, also cherrypick the commits for the fixes 
+If you are doing a PATCH update, also cherry-pick the commits for the fixes 
 you want to include in your update and resolve all potential merge conflicts 
 carefully: 
 
@@ -158,12 +162,12 @@ git commit -m "Bump cirq version to ${NEXT_VER}"
 git push origin "version_bump_${NEXT_VER}"
 ```
 
-Master branch should never see a non-dev version specifier.
+The main branch should never see a non-dev version specifier.
 
 ### Create distribution wheel
 
-From release branch, create a binary distribution wheel. This is the package
-that will go to pypi.
+From the release branch, create a binary distribution wheel. This is the package
+that will go to the [Python Package Index (PyPI)](https://pypi.org).
 
 ```bash
 git checkout "v${VER}-dev"
@@ -171,13 +175,15 @@ git checkout "v${VER}-dev"
 ls dist  # should only contain one file, for each modules 
 ```
 
-### Push to test pypi
+### Push to the TestPyPI servers
 
-The package server pypi has a test server where packages can be uploaded to
-check that they work correctly before pushing the real version.  This section
-illustrates how to upload the package to test pypi and verify that it works.
+The Python Package Index (PyPI) has a [separate
+instance](https://packaging.python.org/en/latest/guides/using-testpypi/) where
+software packages can be uploaded to test that they work correctly before
+pushing them to the real PyPI. This section illustrates how to upload
+the Cirq packge to TestPyPI and verify that everything works.
 
-First, upload the package in the dist/ directory.  (Ensure that this is the only
+First, upload the package in the `dist/` directory.  (Ensure that this is the only
 package in this directory, or modify the commands to upload only this
 file).
 
@@ -187,15 +193,16 @@ twine upload --repository-url=https://test.pypi.org/legacy/ -u="$TEST_TWINE_USER
 
 Next, run automated verification.
 
-Note: sometimes the first verification from test pypi will fail.
+Note: sometimes the first verification from TestPyPI will fail.
 
 ```bash
 # NOTE: FIRST RUN WILL LIKELY FAIL - pypi might not have yet indexed the version
 ./dev_tools/packaging/verify-published-package.sh "${VER}" --test
 ```
-Once this runs, you can create a virtual environment to perform
-manual verification as a sanity check and to check version number and
-any high-risk features that have changed this release.
+
+Once this runs, you can create a virtual Python environment to perform
+manual verification as a sanity check, and to check the version number and
+any high-risk features that have changed in the new version.
 
 ```bash
 mkvirtualenv "verify_test_${VER}" --python=/usr/bin/python3
@@ -226,12 +233,14 @@ checking the history of the init files. `git diff <previous version>..HEAD cirq-
 You can get the contributing authors for the release by running:
 `git log <previous version>..HEAD --pretty="%an" | sort | uniq | sed ':a;N;$!ba;s/\n/, /g'`
 
-### cirq-google Changelog
-Add cirq-google release notes to `cirq-google/CHANGELOG.md` following the [changelog format](https://keepachangelog.com/en/1.0.0/)
+### `cirq-google` Changelog
 
-### Release to prod pypi
+Add `cirq-google` release notes to `cirq-google/CHANGELOG.md` following the
+[changelog format](https://keepachangelog.com/en/1.0.0/)
 
-Upload to prod pypi using the following command:
+### Release to prod PyPI
+
+Upload to production PyPI using the following command:
 
 ```bash
 twine upload --username="$PROD_TWINE_USERNAME" --password="$PROD_TWINE_PASSWORD" "dist/*"
@@ -257,15 +266,19 @@ python -c "import cirq; print(cirq.__version__)"
 
 Using the information above, create the release on the
 [Release page](https://github.com/quantumlib/Cirq/releases).
-Be sure to include the whl file as an attachment.
+Be sure to include the `.whl` file as an attachment.
 
 ### Release PR for notebooks
 
-If there are unreleased notebooks, that are under testing (`NOTEBOOKS_DEPENDING_ON_UNRELEASED_FEATURES` is not empty in [dev_tools/notebooks/isolated_notebook_test.py](dev_tools/notebooks/isolated_notebook_test.py)), follow the steps in our [notebooks guide](docs/dev/notebooks.md).
+If there are unreleased notebooks, that are under testing
+(`NOTEBOOKS_DEPENDING_ON_UNRELEASED_FEATURES` is not empty in
+[dev_tools/notebooks/isolated_notebook_test.py](dev_tools/notebooks/isolated_notebook_test.py)),
+follow the steps in our [notebooks guide](docs/dev/notebooks.md).
 
-### Create zenodo release
+### Create Zenodo release
 
-Got to the [Zenodo release page](https://zenodo.org/record/6599601#.YpZCspPMLzc).
+Got to the
+[Zenodo release page](https://zenodo.org/record/6599601#.YpZCspPMLzc).
 Login using credentials within Google's internal password utility (or get
 someone from Google to do this).  Click "New Version".
 
@@ -276,9 +289,9 @@ someone from Google to do this).  Click "New Version".
 *   Click publish.
 
 
-### Email cirq-announce
+### Email the cirq-announce mailing list
 
-Lastly, email cirq-announce@googlegroups.com with the release notes
+Lastly, email `cirq-announce@googlegroups.com` with the release notes
 and an announcement of the new version.
 
 Congratulate yourself for a well done release!
