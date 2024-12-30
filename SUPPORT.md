@@ -25,4 +25,4 @@ to get an automatic meeting invitation.
 ## Contact the maintainers
 
 For any questions or concerns not addressed here, please email
-[quantum-oss-maintainers@google.com](mailto:quantum-oss-maintainers@google.com).
+quantum-oss-maintainers@google.com.
