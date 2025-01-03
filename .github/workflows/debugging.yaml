@@ -79,8 +79,8 @@ on:
         default: false
 
 run-name: |
-  Debug pytest ${{inputs.single-test || '(all tests)' }} on
-  ${{inputs.os}} ${{inputs.arch}} with Python ${{inputs.py-version}}
+  Pytest ${{inputs.single-test || '(all tests)' }} on ${{inputs.os}}
+  ${{inputs.arch}} with Python ${{inputs.py-version}}
 
 jobs:
   pytest:
@@ -140,7 +140,8 @@ jobs:
             set -e
           fi
           for i in $(seq 1 ${{github.event.inputs.repetitions}}); do
-            echo "▶︎▶︎▶︎▶︎▶︎ Iteration $i ▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎"
+            echo -n "︎▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞ Iteration $i "
+            echo    "▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞"
             check/pytest $workers $flags ${{github.event.inputs.single-test}}
           done
 
