@@ -45,22 +45,30 @@ on:
           - windows-2022
           - windows-2019
 
+      single-test:
+        description: "Run specific single test:"
+        type: string
+        default: ""
+
       repetitions:
-        description: "Repetitions of the test:"
+        description: "Number of repetitions:"
         type: number
         default: 1
-
-      verbose:
-        description: "Verbose tracing:"
-        type: boolean
-        default: false
 
       multiple-workers:
         description: "Use multiple pytest workers?"
         type: boolean
         default: true
 
+      verbose:
+        description: "Turn on verbose tracing?"
+        type: boolean
+        default: false
 
+      exit-first:
+        description: "Stop at first error?"
+        type: boolean
+        default: false
 
 run-name: Debug ${{inputs.what-to-debug}} on ${{inputs.os}} wity Python ${{inputs.py-version}}
 jobs:
@@ -105,25 +113,29 @@ jobs:
 
       - name: Run pytest
         run: |
-          commonflags="--durations=20 --ignore=cirq-core/cirq/contrib"
+          flags="--durations=20 --ignore=cirq-core/cirq/contrib"
           workers="-n auto"
           if [[ "${{github.event.inputs.multiple-workers}}" == "false" ]]; then
             workers="-n0"
           fi
-          extraflags=""
           if [[ "${{github.event.inputs.verbose}}" == "true" ]]; then
-            extraflags="-v --trace-config --full-trace --setup-show"
+            flags+="-verbose --trace-config --full-trace --setup-show"
+            # Save Python info to the run log, in case it's useful.
+            which python
+            pip list
           fi
-          # Save information to the run log, in case it's needed for debugging.
-          which python
-          python --version
-          pip list
-          set -x -e
+          if [[ "${{github.event.inputs.exit-first}}" == "true" ]]; then
+            flags+=" --exitfirst"
+          fi
           for i in $(seq 1 ${{github.event.inputs.repetitions}}); do
             echo "┌──────────────────────────────┐"
-            echo "│ Iteration	$$i               │"
+            echo "│ Iteration	$i               │"
             echo "└──────────────────────────────┘"
-            check/pytest $workers $commonflags $extraflags # --rigetti-integration
+            set -x -e
+            check/pytest $workers $flags ${{github.event.inputs.single-test}} # --rigetti-integration
+            if [[ $? -ne 0 && "${{github.event.inputs.exit-first}}" == "true" ]]; then
+              break
+            fi
           done
 
       # - name: Stop Quil dependencies
