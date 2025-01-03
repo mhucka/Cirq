@@ -1,5 +1,5 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Summary: GitHub workflow for running pytest manually on GitHub, for testing.
+# Summary: GitHub workflow for manually running pytest with debug flags.
 #
 # This workflow can only be executed manually, e.g., using the "Run workflow"
 # button on https://github.com/quantumlib/Cirq/actions/workflows/debug.yaml
@@ -60,6 +60,11 @@ on:
         type: boolean
         default: true
 
+      include-rigetti:
+        description: "Include rigetti module"
+        type: boolean
+        default: false
+
 run-name: Debug pytest ${{inputs.single-test || '(all tests)' }} on ${{inputs.os}} with Python ${{inputs.py-version}}
 jobs:
   pytest:
@@ -99,12 +104,13 @@ jobs:
           pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
 
       - name: Start Quil dependencies
+        if: inputs.include-rigetti == true || inputs.include-rigetti == 'true'
         run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
 
       - name: Run pytest
         run: |
           # Common flags that used for all cases.
-          flags="--durations=20 --ignore=cirq-core/cirq/contrib --rigetti-integration"
+          flags="--durations=20 --ignore=cirq-core/cirq/contrib"
           workers="-n auto"
           if [[ "${{github.event.inputs.multiple-workers}}" == "false" ]]; then
             workers="-n0"
@@ -114,6 +120,9 @@ jobs:
             # Save Python info to the run log, in case it's useful.
             which python
             pip list
+          fi
+          if [[ "${{github.event.inputs.include-rigetti}}" == true ]]; then
+            flags+=" --rigetti-integration"
           fi
           if [[ "${{github.event.inputs.exit-first}}" == "true" ]]; then
             flags+=" --exitfirst"
@@ -125,4 +134,5 @@ jobs:
           done
 
       - name: Stop Quil dependencies
+        if: inputs.include-rigetti == true || inputs.include-rigetti == 'true'
         run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
