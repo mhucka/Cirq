@@ -58,7 +58,7 @@ on:
       exit-first:
         description: "Stop at first error"
         type: boolean
-        default: false
+        default: true
 
 run-name: Debug pytest ${{inputs.single-test || '(all tests)' }} on ${{inputs.os}} with Python ${{inputs.py-version}}
 jobs:
@@ -98,13 +98,13 @@ jobs:
           pip install --upgrade pip setuptools wheel
           pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
 
-      # - name: Start Quil dependencies
-      #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
+      - name: Start Quil dependencies
+        run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
 
       - name: Run pytest
         run: |
           # Common flags that used for all cases.
-          flags="--durations=20 --ignore=cirq-core/cirq/contrib"
+          flags="--durations=20 --ignore=cirq-core/cirq/contrib --rigetti-integration"
           workers="-n auto"
           if [[ "${{github.event.inputs.multiple-workers}}" == "false" ]]; then
             workers="-n0"
@@ -121,8 +121,8 @@ jobs:
           fi
           for i in $(seq 1 ${{github.event.inputs.repetitions}}); do
             echo "▌▌▌▌▌▌ Iteration $i ▌▌▌▌▌▌"
-            check/pytest $workers $flags ${{github.event.inputs.single-test}} # --rigetti-integration
+            check/pytest $workers $flags ${{github.event.inputs.single-test}}
           done
 
-      # - name: Stop Quil dependencies
-      #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
+      - name: Stop Quil dependencies
+        run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
