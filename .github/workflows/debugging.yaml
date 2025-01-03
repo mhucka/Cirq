@@ -15,11 +15,11 @@ on:
       py-version:
         description: "Python version:"
         type: choice
-        default: 3.12
+        default: "3.12"
         options:
-          - 3.10
-          - 3.11
-          - 3.12
+          - "3.10"
+          - "3.11"
+          - "3.12"
       os:
         description: "Runner OS:"
         type: choice
@@ -34,7 +34,7 @@ on:
           - windows-2022
           - windows-2019
       verbose:
-        description: "Verbose logging:"
+        description: "Verbose tracing:"
         type: boolean
         default: false
 
