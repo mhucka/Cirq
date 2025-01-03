@@ -106,7 +106,7 @@ jobs:
           fi
           extraflags=""
           if [[ "${{github.event.inputs.verbose}}" == "true" ]]; then
-            extraflags="-vsx --trace-config --full-trace --setup-show"
+            extraflags="-v --trace-config --full-trace --setup-show"
           fi
           # Save information to the run log, in case it's needed for debugging.
           echo "─────────────────────────────────────────────────────────────"
