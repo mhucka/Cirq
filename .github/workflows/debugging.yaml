@@ -121,7 +121,7 @@ jobs:
           set -x -e
           for i in $(seq 1 ${{github.event.inputs.repetitions}}): do
             echo "┌──────────────────────────────┐"
-            echo "│ Iteration	$i               │"
+            echo "│ Iteration	$$i               │"
             echo "└──────────────────────────────┘"
             check/pytest $workers $commonflags $extraflags # --rigetti-integration
           done
