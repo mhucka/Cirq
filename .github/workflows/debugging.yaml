@@ -126,14 +126,11 @@ jobs:
           fi
           if [[ "${{github.event.inputs.exit-first}}" == "true" ]]; then
             flags+=" --exitfirst"
+            set -e
           fi
           for i in $(seq 1 ${{github.event.inputs.repetitions}}); do
             echo "▌▌▌▌▌▌ Iteration $i ▌▌▌▌▌▌"
-            set -x -e
             check/pytest $workers $flags ${{github.event.inputs.single-test}} # --rigetti-integration
-            if [[ $? -ne 0 && "${{github.event.inputs.exit-first}}" == "true" ]]; then
-              break
-            fi
           done
 
       # - name: Stop Quil dependencies
