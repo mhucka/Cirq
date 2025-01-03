@@ -36,9 +36,10 @@ on:
 
 jobs:
   run-job:
-    name: Run debugging job
+    name: Run ${{github.event.inputs.what-to-debug}} job on ${{github.event.inputs.os}}
     runs-on: ${{github.event.inputs.os}}
     steps:
-      - run: |
+      - name: Echo some stuff
+        run: |
           echo ${{github.event.inputs.what-to-debug}}
           echo ${{github.event.inputs.python-version}}
