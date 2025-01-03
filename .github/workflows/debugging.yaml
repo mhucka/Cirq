@@ -119,7 +119,7 @@ jobs:
           python --version
           pip list
           set -x -e
-          for i in $(seq 1 ${{github.event.inputs.repetitions}}): do
+          for i in $(seq 1 ${{github.event.inputs.repetitions}}); do
             echo "┌──────────────────────────────┐"
             echo "│ Iteration	$$i               │"
             echo "└──────────────────────────────┘"
