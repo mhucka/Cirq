@@ -7,7 +7,7 @@
 # various options for the characteristics of the run.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-name: Debug CI jobs
+name: Debug pytest
 
 on:
   workflow_dispatch:
@@ -44,6 +44,10 @@ on:
         description: "Number of repetitions:"
         type: number
         default: 1
+
+      random-seed:
+        description: "Explicit random seed:"
+        type: number
 
       multiple-workers:
         description: "Use multiple pytest workers"
@@ -112,6 +116,9 @@ jobs:
           # Common flags that used for all cases.
           flags="--durations=20 --ignore=cirq-core/cirq/contrib"
           workers="-n auto"
+          if [[ -n "${{github.event.inputs.random-seed}}" ]]; then
+            flags=" --randomly-seed=${{github.event.inputs.random-seed}}"
+          fi
           if [[ "${{github.event.inputs.multiple-workers}}" == "false" ]]; then
             workers="-n0"
           fi
