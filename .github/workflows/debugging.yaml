@@ -17,6 +17,7 @@ on:
         type: choice
         default: "3.12"
         options:
+          - "3.13"
           - "3.12"
           - "3.11"
           - "3.10"
@@ -34,6 +35,14 @@ on:
           - windows-2025
           - windows-2022
           - windows-2019
+
+      arch:
+        description: "Hardware architecture:"
+        type: choice
+        default: x64
+        options:
+          - x64
+          - arm64
 
       single-test:
         description: "Run specific single test:"
@@ -69,34 +78,27 @@ on:
         type: boolean
         default: false
 
-run-name: Debug pytest ${{inputs.single-test || '(all tests)' }} on ${{inputs.os}} with Python ${{inputs.py-version}}
+run-name: |
+  Debug pytest ${{inputs.single-test || '(all tests)' }} on
+  ${{inputs.os}} ${{inputs.arch}} with Python ${{inputs.py-version}}
+
 jobs:
   pytest:
     name: Run pytest
     runs-on: ${{github.event.inputs.os}}
     steps:
       - name: Do miscellaneous preliminary configuration steps
-        id: config
         run: |
           mkdir -p ~/.cache/pip
-          case "${{github.event.inputs.os}}" in
-            macos*)
-              echo "arch=arm64" >> "$GITHUB_OUTPUT"
-              ;;
-            *)
-              echo "arch=x64" >> "$GITHUB_OUTPUT"
-              ;;
-          esac
 
       - name: Check out a copy of the Cirq git repository
         uses: actions/checkout@v4
 
       - name: Set up Python
-        id: python
         uses: actions/setup-python@v5
         with:
           python-version: ${{github.event.inputs.py-version}}
-          architecture: ${{steps.config.outputs.arch}}
+          architecture: ${{github.event.inputs.arch}}
           cache: pip
           cache-dependency-path: |
             dev_tools/requirements/*.txt
@@ -104,10 +106,12 @@ jobs:
 
       - name: Install Python requirements
         run: |
+          set -e
+          requirements="dev_tools/requirements/dev.env.txt"
           pip install --upgrade pip setuptools wheel
-          pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
+          pip install --upgrade --upgrade-strategy eager -r "$requirements"
 
-      - name: Start Quil dependencies
+      - name: Start Quil dependencies if needed
         if: inputs.include-rigetti == true || inputs.include-rigetti == 'true'
         run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
 
@@ -136,10 +140,10 @@ jobs:
             set -e
           fi
           for i in $(seq 1 ${{github.event.inputs.repetitions}}); do
-            echo "▌▌▌▌▌▌ Iteration $i ▌▌▌▌▌▌"
+            echo "▶︎▶︎▶︎▶︎▶︎ Iteration $i ▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎▶︎"
             check/pytest $workers $flags ${{github.event.inputs.single-test}}
           done
 
-      - name: Stop Quil dependencies
+      - name: Stop Quil dependencies if needed
         if: inputs.include-rigetti == true || inputs.include-rigetti == 'true'
         run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
