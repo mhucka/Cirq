@@ -80,10 +80,18 @@ jobs:
 
       - name: Run pytest
         run: |
+          set -x -e
           extraflags=""
           if [[ "${{github.event.inputs.os}}" == "true" ]]; then
             extraflags="-vsx --trace-config --full-trace --setup-show"
           fi
+          # Save information to the run log, in case it's needed for debugging.
+          echo "─────────────────────────────────────────────────────────────"
+          which python
+          python --version
+          python -c 'import site; print(site.getsitepackages())'
+          pip list
+          echo "─────────────────────────────────────────────────────────────"
           check/pytest -n auto --durations=20 "$extraflags" --ignore=cirq-core/cirq/contrib # --rigetti-integration
 
       # - name: Stop Quil dependencies
