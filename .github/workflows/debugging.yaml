@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       what-to-debug:
-        description: What to debug
+        description: "What to debug:"
         type: choice
         default: pytest
         options:
@@ -13,7 +13,7 @@ on:
           - windows
           - macos
       py-version:
-        description: Python version
+        description: "Python version:"
         type: choice
         default: 3.12
         options:
@@ -21,7 +21,7 @@ on:
           - 3.11
           - 3.12
       os:
-        description: OS
+        description: "Runner OS:"
         type: choice
         default: ubuntu-20.04
         options:
@@ -33,17 +33,20 @@ on:
           - windows-2025
           - windows-2022
           - windows-2019
+      verbose:
+        description: "Verbose logging:"
+        type: boolean
+        default: false
 
 jobs:
-  config:
-    name: Configure this run
+  pytest:
+    name: Run pytest on ${{github.event.inputs.os}} with Python ${{github.event.inputs.py-version}}
     runs-on: ${{github.event.inputs.os}}
-    outputs:
-      arch: ${{steps.determine.outputs.arch}}
     steps:
-      - name: Determine architecture
-        id: determine
+      - name: Do miscellaneous preliminary configuration steps
+        id: config
         run: |
+          mkdir -p ~/.cache/pip
           case "${{github.event.inputs.os}}" in
             macos*)
               echo "arch=arm64" >> "$GITHUB_OUTPUT"
@@ -52,13 +55,7 @@ jobs:
               echo "arch=x64" >> "$GITHUB_OUTPUT"
               ;;
           esac
-          mkdir -p ~/.cache/pip
 
-  pytest:
-    name: Run pytest on ${{github.event.inputs.os}} with Python ${{github.event.inputs.py-version}}
-    needs: config
-    runs-on: ${{github.event.inputs.os}}
-    steps:
       - name: Check out a copy of the Cirq git repository
         uses: actions/checkout@v4
 
@@ -67,7 +64,7 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{github.event.inputs.py-version}}
-          architecture: ${{needs.config.outputs.arch}}
+          architecture: ${{steps.config.outputs.arch}}
           cache: pip
           cache-dependency-path: |
             dev_tools/requirements/*.txt
@@ -82,7 +79,12 @@ jobs:
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
 
       - name: Run pytest
-        run: check/pytest -n auto --durations=20 -vsx --trace-config --full-trace --setup-show --ignore=cirq-core/cirq/contrib # --rigetti-integration
+        run: |
+          extraflags=""
+          if [[ "${{github.event.inputs.os}}" == "true" ]]; then
+            extraflags="-vsx --trace-config --full-trace --setup-show"
+          fi
+          check/pytest -n auto --durations=20 "$extraflags" --ignore=cirq-core/cirq/contrib # --rigetti-integration
 
       # - name: Stop Quil dependencies
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
