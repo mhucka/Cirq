@@ -12,7 +12,7 @@ on:
           - coverage
           - windows
           - macos
-      python-version:
+      py-version:
         description: Python version
         type: choice
         default: 3.12
@@ -35,11 +35,58 @@ on:
           - windows-2019
 
 jobs:
-  run-job:
-    name: Run ${{github.event.inputs.what-to-debug}} job on ${{github.event.inputs.os}}
+  config:
+    name: Configure this run
+    runs-on: ${{github.event.inputs.os}}
+    outputs:
+      arch: ${{steps.determine.outputs.arch}}
+    steps:
+      - name: Determine architecture
+        id: determine
+        run: |
+          case "${{github.event.inputs.os}}" in
+            macos*)
+              echo "arch=arm64" >> "$GITHUB_OUTPUT"
+              ;;
+            *)
+              echo "arch=x64" >> "$GITHUB_OUTPUT"
+              ;;
+          esac
+
+  pytest:
+    name: Run pytest on ${{github.event.inputs.os}} with Python ${{github.event.inputs.py-version}}
+    needs: config
     runs-on: ${{github.event.inputs.os}}
     steps:
-      - name: Echo some stuff
-        run: |
-          echo ${{github.event.inputs.what-to-debug}}
-          echo ${{github.event.inputs.python-version}}
+      - name: Check out source repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        id: python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{github.event.inputs.py-version}}
+          architecture: ${{needs.config.outputs.arch}}
+          cache: pip
+
+
+
+      # - name: Set up caching of dependencies
+      #   uses: actions/cache@v4
+      #   with:
+      #     path: ${{ env.pythonLocation }}
+      #     key: ${{ env.pythonLocation }}-${{ hashFiles('**/requirements.txt', 'dev_tools/requirements/**/*.txt') }}
+
+      # - name: Install requirements
+      #   run: |
+      #     pip install wheel
+      #     pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
+
+      # - name: Run Quil dependencies
+      #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
+
+      # - name: Pytest check
+      #   run: check/pytest -n auto --durations=20 --ignore=cirq-core/cirq/contrib --rigetti-integration
+
+      # - name: Stop Quil dependencies
+      #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
