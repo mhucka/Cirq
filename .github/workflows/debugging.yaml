@@ -78,11 +78,11 @@ jobs:
           pip install --upgrade pip setuptools wheel
           pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
 
-      # - name: Run Quil dependencies
+      # - name: Start Quil dependencies
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
 
-      # - name: Pytest check
-      #   run: check/pytest -n auto --durations=20 --ignore=cirq-core/cirq/contrib --rigetti-integration
+      - name: Run pytest
+        run: check/pytest -n auto --durations=20 -vsx --trace-config --full-trace --setup-show --ignore=cirq-core/cirq/contrib # --rigetti-integration
 
       # - name: Stop Quil dependencies
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
