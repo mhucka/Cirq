@@ -110,7 +110,7 @@ jobs:
             workers="-n0"
           fi
           if [[ "${{github.event.inputs.verbose}}" == "true" ]]; then
-            flags+="-verbose --trace-config --full-trace --setup-show"
+            flags+="-vv --trace-config --full-trace --setup-show"
             # Save Python info to the run log, in case it's useful.
             which python
             pip list
