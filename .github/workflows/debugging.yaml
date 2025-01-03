@@ -1,4 +1,13 @@
-name: Debug remote CI
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Summary: GitHub workflow for running CI jobs manually, for testing
+#
+# This workflow can only be executed manually, using the "Run workflow" button
+# on https://github.com/quantumlib/Cirq/actions/workflows/debug.yaml
+# Clicking the "Run workflow" button there will present a form interface with
+# various options for the characteristics of the run.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+name: Debug CI jobs
 
 on:
   workflow_dispatch:
@@ -12,6 +21,7 @@ on:
           - coverage
           - windows
           - macos
+
       py-version:
         description: "Python version:"
         type: choice
@@ -20,6 +30,7 @@ on:
           - "3.10"
           - "3.11"
           - "3.12"
+
       os:
         description: "Runner OS:"
         type: choice
@@ -33,11 +44,13 @@ on:
           - windows-2025
           - windows-2022
           - windows-2019
+
       verbose:
         description: "Verbose tracing:"
         type: boolean
         default: false
 
+run-name: Debug ${{inputs.what-to-debug}} on ${{inputs.os}} and ${{inputs.py-version}}
 jobs:
   pytest:
     name: Run pytest on ${{github.event.inputs.os}} with Python ${{github.event.inputs.py-version}}
@@ -80,7 +93,6 @@ jobs:
 
       - name: Run pytest
         run: |
-          set -x -e
           extraflags=""
           if [[ "${{github.event.inputs.os}}" == "true" ]]; then
             extraflags="-vsx --trace-config --full-trace --setup-show"
@@ -89,9 +101,9 @@ jobs:
           echo "─────────────────────────────────────────────────────────────"
           which python
           python --version
-          python -c 'import site; print(site.getsitepackages())'
           pip list
           echo "─────────────────────────────────────────────────────────────"
+          set -x -e
           check/pytest -n auto --durations=20 "$extraflags" --ignore=cirq-core/cirq/contrib # --rigetti-integration
 
       # - name: Stop Quil dependencies
