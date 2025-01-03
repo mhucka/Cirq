@@ -56,10 +56,10 @@ on:
         default: true
 
 
-run-name: Debug ${{inputs.what-to-debug}} on ${{inputs.os}} and ${{inputs.py-version}}
+run-name: Debug ${{inputs.what-to-debug}} on ${{inputs.os}} wity Python ${{inputs.py-version}}
 jobs:
   pytest:
-    name: Run pytest on ${{github.event.inputs.os}} with Python ${{github.event.inputs.py-version}}
+    name: Run pytest
     runs-on: ${{github.event.inputs.os}}
     steps:
       - name: Do miscellaneous preliminary configuration steps
@@ -115,7 +115,7 @@ jobs:
           pip list
           echo "─────────────────────────────────────────────────────────────"
           set -x -e
-          check/pytest "$workers" "$commonflags" "$extraflags" # --rigetti-integration
+          check/pytest $workers $commonflags $extraflags # --rigetti-integration
 
       # - name: Stop Quil dependencies
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
