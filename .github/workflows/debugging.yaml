@@ -1,8 +1,8 @@
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Summary: GitHub workflow for running CI jobs manually, for testing
+# Summary: GitHub workflow for running pytest manually on GitHub, for testing.
 #
-# This workflow can only be executed manually, using the "Run workflow" button
-# on https://github.com/quantumlib/Cirq/actions/workflows/debug.yaml
+# This workflow can only be executed manually, e.g., using the "Run workflow"
+# button on https://github.com/quantumlib/Cirq/actions/workflows/debug.yaml
 # Clicking the "Run workflow" button there will present a form interface with
 # various options for the characteristics of the run.
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -12,16 +12,6 @@ name: Debug CI jobs
 on:
   workflow_dispatch:
     inputs:
-      what-to-debug:
-        description: "What to debug:"
-        type: choice
-        default: pytest
-        options:
-          - pytest
-          - coverage
-          - windows
-          - macos
-
       py-version:
         description: "Python version:"
         type: choice
@@ -56,21 +46,21 @@ on:
         default: 1
 
       multiple-workers:
-        description: "Use multiple pytest workers?"
+        description: "Use multiple pytest workers"
         type: boolean
         default: true
 
       verbose:
-        description: "Turn on verbose tracing?"
+        description: "Turn on verbose tracing"
         type: boolean
         default: false
 
       exit-first:
-        description: "Stop at first error?"
+        description: "Stop at first error"
         type: boolean
         default: false
 
-run-name: Debug ${{inputs.what-to-debug}} on ${{inputs.os}} wity Python ${{inputs.py-version}}
+run-name: Debug pytest on ${{inputs.os}} wity Python ${{inputs.py-version}}
 jobs:
   pytest:
     name: Run pytest
@@ -113,6 +103,7 @@ jobs:
 
       - name: Run pytest
         run: |
+
           flags="--durations=20 --ignore=cirq-core/cirq/contrib"
           workers="-n auto"
           if [[ "${{github.event.inputs.multiple-workers}}" == "false" ]]; then
