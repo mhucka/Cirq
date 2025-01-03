@@ -52,13 +52,14 @@ jobs:
               echo "arch=x64" >> "$GITHUB_OUTPUT"
               ;;
           esac
+          mkdir -p ~/.cache/pip
 
   pytest:
     name: Run pytest on ${{github.event.inputs.os}} with Python ${{github.event.inputs.py-version}}
     needs: config
     runs-on: ${{github.event.inputs.os}}
     steps:
-      - name: Check out source repository
+      - name: Check out a copy of the Cirq git repository
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -68,19 +69,14 @@ jobs:
           python-version: ${{github.event.inputs.py-version}}
           architecture: ${{needs.config.outputs.arch}}
           cache: pip
+          cache-dependency-path: |
+            dev_tools/requirements/*.txt
+            dev_tools/requirements/deps/*.txt
 
-
-
-      # - name: Set up caching of dependencies
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: ${{ env.pythonLocation }}
-      #     key: ${{ env.pythonLocation }}-${{ hashFiles('**/requirements.txt', 'dev_tools/requirements/**/*.txt') }}
-
-      # - name: Install requirements
-      #   run: |
-      #     pip install wheel
-      #     pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
+      - name: Install Python requirements
+        run: |
+          pip install --upgrade pip setuptools wheel
+          pip install --upgrade --upgrade-strategy eager -r dev_tools/requirements/dev.env.txt
 
       # - name: Run Quil dependencies
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml up -d
