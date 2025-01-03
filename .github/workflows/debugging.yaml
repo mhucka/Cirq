@@ -17,9 +17,9 @@ on:
         type: choice
         default: "3.12"
         options:
-          - "3.10"
-          - "3.11"
           - "3.12"
+          - "3.11"
+          - "3.10"
 
       os:
         description: "Runner OS:"
@@ -60,7 +60,7 @@ on:
         type: boolean
         default: false
 
-run-name: Debug pytest on ${{inputs.os}} wity Python ${{inputs.py-version}}
+run-name: Debug pytest ${{inputs.single-test || '(all tests)' }} on ${{inputs.os}} with Python ${{inputs.py-version}}
 jobs:
   pytest:
     name: Run pytest
@@ -103,7 +103,7 @@ jobs:
 
       - name: Run pytest
         run: |
-
+          # Common flags that used for all cases.
           flags="--durations=20 --ignore=cirq-core/cirq/contrib"
           workers="-n auto"
           if [[ "${{github.event.inputs.multiple-workers}}" == "false" ]]; then
