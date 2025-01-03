@@ -1,0 +1,44 @@
+name: Debug remote CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      what-to-debug:
+        description: What to debug
+        type: choice
+        default: pytest
+        options:
+          - pytest
+          - coverage
+          - windows
+          - macos
+      python-version:
+        description: Python version
+        type: choice
+        default: 3.12
+        options:
+          - 3.10
+          - 3.11
+          - 3.12
+      os:
+        description: OS
+        type: choice
+        default: ubuntu-20.04
+        options:
+          - ubuntu-22.04
+          - ubuntu-20.04
+          - macos-15
+          - macos-14
+          - macos-13
+          - windows-2025
+          - windows-2022
+          - windows-2019
+
+jobs:
+  run-job:
+    name: Run debugging job
+    runs-on: ${{github.event.inputs.os}}
+    steps:
+      - run: |
+          echo ${{github.event.inputs.what-to-debug}}
+          echo ${{github.event.inputs.python-version}}
