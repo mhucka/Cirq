@@ -50,6 +50,12 @@ on:
         type: boolean
         default: false
 
+      multiple-workers:
+        description: "Use multiple pytest workers?"
+        type: boolean
+        default: true
+
+
 run-name: Debug ${{inputs.what-to-debug}} on ${{inputs.os}} and ${{inputs.py-version}}
 jobs:
   pytest:
@@ -93,8 +99,13 @@ jobs:
 
       - name: Run pytest
         run: |
+          commonflags="--durations=20 --ignore=cirq-core/cirq/contrib"
+          workers="-n auto"
+          if [[ "${{github.event.inputs.multiple-workers}}" == "false" ]]; then
+            workers="-n0"
+          fi
           extraflags=""
-          if [[ "${{github.event.inputs.os}}" == "true" ]]; then
+          if [[ "${{github.event.inputs.verbose}}" == "true" ]]; then
             extraflags="-vsx --trace-config --full-trace --setup-show"
           fi
           # Save information to the run log, in case it's needed for debugging.
@@ -104,7 +115,7 @@ jobs:
           pip list
           echo "─────────────────────────────────────────────────────────────"
           set -x -e
-          check/pytest -n auto --durations=20 "$extraflags" --ignore=cirq-core/cirq/contrib # --rigetti-integration
+          check/pytest "$workers" "$commonflags" "$extraflags" # --rigetti-integration
 
       # - name: Stop Quil dependencies
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
