@@ -45,6 +45,11 @@ on:
           - windows-2022
           - windows-2019
 
+      repetitions:
+        description: "Repetitions of the test:"
+        type: number
+        default: 1
+
       verbose:
         description: "Verbose tracing:"
         type: boolean
@@ -54,6 +59,7 @@ on:
         description: "Use multiple pytest workers?"
         type: boolean
         default: true
+
 
 
 run-name: Debug ${{inputs.what-to-debug}} on ${{inputs.os}} wity Python ${{inputs.py-version}}
@@ -109,13 +115,16 @@ jobs:
             extraflags="-v --trace-config --full-trace --setup-show"
           fi
           # Save information to the run log, in case it's needed for debugging.
-          echo "─────────────────────────────────────────────────────────────"
           which python
           python --version
           pip list
-          echo "─────────────────────────────────────────────────────────────"
           set -x -e
-          check/pytest $workers $commonflags $extraflags # --rigetti-integration
+          for i in $(seq 1 ${{github.event.inputs.repetitions}}): do
+            echo "┌──────────────────────────────┐"
+            echo "│ Iteration	$i               │"
+            echo "└──────────────────────────────┘"
+            check/pytest $workers $commonflags $extraflags # --rigetti-integration
+          done
 
       # - name: Stop Quil dependencies
       #   run: docker compose -f cirq-rigetti/docker-compose.test.yaml down
