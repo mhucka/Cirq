@@ -19,6 +19,7 @@ jobs:
   quick_test:
     name: Misc check
     runs-on: ubuntu-22.04
+    timeout-minutes: 5
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -32,6 +33,7 @@ jobs:
   packaging_test:
     name: Packaging test
     runs-on: ubuntu-22.04
+    timeout-minutes: 5
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -47,6 +49,7 @@ jobs:
   format:
     name: Format check
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -64,6 +67,7 @@ jobs:
   mypy:
     name: Type check
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -79,6 +83,7 @@ jobs:
   changed_files:
     name: Changed files test
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -96,6 +101,7 @@ jobs:
   lint:
     name: Lint check
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -113,6 +119,7 @@ jobs:
   doc_test:
     name: Doc test
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -128,6 +135,7 @@ jobs:
   nbformat:
     name: Notebook formatting
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -143,6 +151,7 @@ jobs:
   shellcheck:
     name: Shell check
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -153,6 +162,7 @@ jobs:
   isolated-modules:
     name: Isolated pytest Ubuntu
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -171,6 +181,7 @@ jobs:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -205,6 +216,7 @@ jobs:
       matrix:
         python-version: ['3.10', '3.11', '3.12', '3.13']
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -231,6 +243,7 @@ jobs:
   pip-compile:
     name: Check consistency of requirements
     runs-on: ubuntu-22.04
+    timeout-minutes: 5
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -247,6 +260,7 @@ jobs:
   build_protos:
     name: Build protos
     runs-on: ubuntu-22.04
+    timeout-minutes: 5
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -265,6 +279,7 @@ jobs:
   coverage:
     name: Coverage check
     runs-on: ubuntu-22.04
+    timeout-minutes: 30
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -304,6 +319,7 @@ jobs:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
     runs-on: windows-2019
+    timeout-minutes: 30
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -332,6 +348,7 @@ jobs:
       matrix:
         python-version: ['3.10', '3.11', '3.12']
     runs-on: macos-13
+    timeout-minutes: 30
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -360,6 +377,7 @@ jobs:
         # partitions should be named partition-0 to partition-(NOTEBOOK_PARTITIONS-1)
         partition: [partition-0, partition-1, partition-2, partition-3]
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -383,6 +401,7 @@ jobs:
   notebooks-branch:
     name: Notebook Tests against PR
     runs-on: ubuntu-22.04
+    timeout-minutes: 15
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -404,6 +423,7 @@ jobs:
   ts-build:
     name: Bundle file consistency
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -418,6 +438,7 @@ jobs:
   ts-lint:
     name: Typescript lint check
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -432,6 +453,7 @@ jobs:
   ts-test:
     name: Typescript tests
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
@@ -448,6 +470,7 @@ jobs:
   ts-coverage:
     name: Typescript tests coverage
     runs-on: ubuntu-22.04
+    timeout-minutes: 10
     steps:
       - name: Check out source repository
         uses: actions/checkout@v4
