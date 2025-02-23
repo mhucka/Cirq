@@ -140,6 +140,7 @@ jobs:
             set -e
           fi
           # Now finally run pytest, as many times as requested.
+          # shellcheck disable=2086
           for i in $(seq 1 ${{github.event.inputs.repetitions}}); do
             echo ""
             echo -n "︎▞▚▞ Iteration $i ▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚▞▚"
