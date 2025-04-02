@@ -31,30 +31,30 @@ exclude_files:
 label_configs:
   - size: xs
     diff: 10           # Threshold for total LoC changed (additions + deletions)
-    files: 1           # Threshold for total number of files changed
+    files: 0           # Threshold for total number of files changed
     labels: ["size: XS"]  # Labels to be applied for this size
 
   - size: s
     diff: 50
-    files: 1
+    files: 0
     labels: ["size: S"]
 
   - size: m
     diff: 250
-    files: 1
+    files: 0
     labels: ["size: M"]
 
   - size: l
     diff: 1000
-    files: 1
+    files: 0
     labels: ["size: L"]
 
   - size: xl
     diff: 5000
-    files: 1
+    files: 0
     labels: ["size: XL"]
 
   - size: xxl
     diff: 100000
-    files: 1
+    files: 0
     labels: ["size: XXL"]
