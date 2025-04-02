@@ -53,3 +53,11 @@ jobs:
           github_pr_number: ${{github.event.number}}
           github_repository: ${{github.repository}}
           config_file_path: ${{github.workspace}}/.github/pr-size-labels.yaml
+
+      - run: |
+          set -x
+          ls -a
+          ls -la ${{github.action_path}}
+          ls -la ${{github.event_path}}
+          ls -la ${{github.workflow_ref}}
+
