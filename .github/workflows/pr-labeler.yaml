@@ -46,13 +46,19 @@ jobs:
       pull-requests: write
       issues: write
     steps:
+      - name: Check out a copy of the git repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
       - name: Label the PR with a size label
         uses: cbrgm/pr-size-labeler-action@85f918ef4ef0a7dbc08166774f9158697584bc8c # v1
+        continue-on-error: true
         with:
           github_token: ${{secrets.GITHUB_TOKEN}}
           github_pr_number: ${{github.event.number}}
           github_repository: ${{github.repository}}
-          config_file_path: ${{github.workspace}}/.github/pr-size-labels.yaml
+          config_file_path: '.github/pr-size-labels.yaml'
 
       - run: |
           set -x
@@ -60,4 +66,3 @@ jobs:
           ls -la ${{github.action_path}}
           ls -la ${{github.event_path}}
           ls -la ${{github.workflow_ref}}
-
