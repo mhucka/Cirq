@@ -52,4 +52,4 @@ jobs:
           github_token: ${{secrets.GITHUB_TOKEN}}
           github_pr_number: ${{github.event.number}}
           github_repository: ${{github.repository}}
-          config_file_path: .pr-size-labels.yaml
+          config_file_path: ${{env.RUNNER_HOME}}/.github/pr-size-labels.yaml
