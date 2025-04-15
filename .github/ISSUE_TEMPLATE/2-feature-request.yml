@@ -9,11 +9,28 @@ body:
         Please tell us the context of your request. Is it to help you do
         something that you currently cannot due to limitations in Cirq, or is it
         an idea for an enhancement or new functionality, or something else?
-        If there is other relevant work that would be useful for us to read, or
-        screenshots (if appropriate) that would illustrate something, please
-        include it here too.
     validations:
       required: true
+
+  - type: textarea
+    attributes:
+      label: What alternatives or workarounds have you considered?
+      description: >-
+        Is it possible to do what you need in some other way? What are the
+        disadvantages of doing it that way?
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: What solution would you prefer?
+      description: >-
+        If you have ideas for how to implement the feature request, please let
+        us know here. If there is other relevant work that would be useful for
+        us to read, or screenshots (if appropriate) that would illustrate
+        something, please include it too.
+    validations:
+      required: false
 
   - type: dropdown
     attributes:
@@ -28,15 +45,3 @@ body:
         - P3 – not blocked; it's an idea
     validations:
       required: true
-
-  - type: textarea
-    attributes:
-      label: What solution would you prefer?
-    validations:
-      required: false
-
-  - type: textarea
-    attributes:
-      label: What alternatives or workarounds have you considered?
-    validations:
-      required: false
