@@ -25,13 +25,13 @@ body:
         2. Then do that.
         3. Then do the other.
 
-        ```
-        Put code in Markdown code blocks *like this*.
+        ```python
+        Put code inside Markdown fenced code blocks like this.
         ```
 
         <details>
 
-        Put long logs in HTML details blocks *like this*.
+        Put long output inside HTML details blocks like this.
 
         </details>
     validations:
