@@ -24,6 +24,16 @@ body:
         1. Do this.
         2. Then do that.
         3. Then do the other.
+
+        ```
+        Put code in Markdown code blocks *like this*.
+        ```
+
+        <details>
+
+        Put long logs in HTML details blocks *like this*.
+
+        </details>
     validations:
       required: false
 
