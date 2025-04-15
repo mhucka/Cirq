@@ -9,6 +9,9 @@ body:
         Please tell us the context of your request. Is it to help you do
         something that you currently cannot due to limitations in Cirq, or is it
         an idea for an enhancement or new functionality, or something else?
+        If there is other relevant work that would be useful for us to read, or
+        screenshots (if appropriate) that would illustrate something, please
+        include it here too.
     validations:
       required: true
 
@@ -30,20 +33,10 @@ body:
     attributes:
       label: What solution would you prefer?
     validations:
-      required: true
-
-  - type: textarea
-    attributes:
-      label: What alternatives or workarounds have you considered?
-    validations:
       required: false
 
   - type: textarea
     attributes:
-      label: Is there additional information or context?
-      description: >-
-        If there is other relevant work that would be useful for us to read, or
-        screenshots (if appropriate) that would illustrate something, please
-        include it here.
+      label: What alternatives or workarounds have you considered?
     validations:
       required: false
