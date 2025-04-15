@@ -20,6 +20,12 @@ body:
         For long output, paste the text into [collapsed
         sections](https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-collapsed-sections)
         or attach text files.
+      placeholder: |+
+        ## Steps:
+        1. Do this.
+        2. Then do that.
+        3. Then do the other.
+      render: markdown
     validations:
       required: false
 
