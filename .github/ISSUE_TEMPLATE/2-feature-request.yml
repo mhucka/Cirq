@@ -1,0 +1,49 @@
+name: Feature request
+description: Request a new feature or change in Cirq or the project
+labels: 'kind/feature-request'
+body:
+  - type: textarea
+    attributes:
+      label: Is your feature request related to a use case or problem?
+      description: >-
+        Please tell us the context of your request. Is it to help you do
+        something that you currently cannot due to limitations in Cirq, or is it
+        an idea for an enhancement or new functionality, or something else?
+    validations:
+      required: true
+
+  - type: dropdown
+    attributes:
+      label: How urgent is this for you?
+      description: >-
+        Please choose from among the following options. If the lack of this
+        feature is blocking important work, please choose from among P0–P3.
+      options:
+        - P0 – needed no later than a week
+        - P1 – needed by the next release
+        - P2 – needed within two quarters
+        - P3 – not blocked; it's an idea
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: What solution would you prefer?
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: What alternatives or workarounds have you considered?
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: Is there additional information or context?
+      description: >-
+        If there is other relevant work that would be useful for us to read, or
+        screenshots (if appropriate) that would illustrate something, please
+        include it here.
+    validations:
+      required: false
