@@ -20,6 +20,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from cirq import devices, study, work
+import cirq
 
 if TYPE_CHECKING:
     import cirq
@@ -27,6 +28,9 @@ if TYPE_CHECKING:
 
 class ZerosSampler(work.Sampler, metaclass=abc.ABCMeta):
     """A mock sampler for testing. Immediately returns zeroes."""
+
+    def _json_dict_(self):
+        return cirq.obj_to_dict_helper(self, ['device'])
 
     def __init__(self, device: devices.Device | None = None):
         """Construct a sampler that returns 0 for all measurements.
@@ -36,6 +40,14 @@ class ZerosSampler(work.Sampler, metaclass=abc.ABCMeta):
                 no validation will be done.
         """
         self.device = device
+
+    def __eq__(self, other):
+        if not isinstance(other, ZerosSampler):
+            return NotImplemented
+        return self.device == other.device
+
+    def __hash__(self):
+        return hash(self.device)
 
     def run_sweep(
         self, program: cirq.AbstractCircuit, params: study.Sweepable, repetitions: int = 1

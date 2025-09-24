@@ -1,0 +1,1 @@
+cirq_ionq.SerializedProgram(input={'gateset': 'qis', 'qubits': 1, 'circuit': []}, settings={}, metadata={}, compilation={}, error_mitigation={}, noise={}, dry_run=False)

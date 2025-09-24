@@ -1,0 +1,1 @@
+[cirq.InsertStrategy.NEW, cirq.InsertStrategy.NEW_THEN_INLINE, cirq.InsertStrategy.INLINE, cirq.InsertStrategy.EARLIEST]

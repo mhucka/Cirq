@@ -1,0 +1,22 @@
+{
+  "cirq_type": "PauliSumExponential",
+  "pauli_sum": {
+    "cirq_type": "PauliSum",
+    "terms": [
+      {
+        "cirq_type": "PauliString",
+        "qubit_pauli_map": [
+          [
+            {
+              "cirq_type": "LineQubit",
+              "index": 0
+            },
+            "X"
+          ]
+        ],
+        "coefficient": 1.0
+      }
+    ]
+  },
+  "exponent": 0.5
+}

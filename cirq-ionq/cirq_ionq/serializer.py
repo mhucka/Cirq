@@ -43,6 +43,9 @@ _NATIVE_GATES = cirq.Gateset(
 
 @dataclasses.dataclass
 class SerializedProgram:
+    def _json_dict_(self):
+        return cirq.dataclass_json_dict(self)
+
     """A container for the serialized portions of a `cirq.Circuit`.
 
     Attributes:

@@ -45,6 +45,24 @@ class InsertStrategy:
     def __repr__(self) -> str:
         return f'cirq.InsertStrategy.{self.name}'
 
+    def _json_dict_(self):
+        return {'cirq_type': self.__class__.__name__, 'name': self.name}
+
+    @classmethod
+    def _from_json_dict_(cls, name, **kwargs):
+        for e in [
+            InsertStrategy.NEW,
+            InsertStrategy.NEW_THEN_INLINE,
+            InsertStrategy.INLINE,
+            InsertStrategy.EARLIEST,
+        ]:
+            if e.name == name:
+                return e
+        # For backwards compatibility
+        if name == 'EARLIEST_CIRCUIT':
+            return InsertStrategy.EARLIEST
+        raise ValueError(f"Unknown InsertStrategy name: {name}")
+
 
 InsertStrategy.NEW = InsertStrategy(
     'NEW',

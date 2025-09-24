@@ -33,4 +33,5 @@ def _class_resolver_dictionary() -> dict[str, ObjectFactory]:  # pragma: no cove
         "IonQTargetGateset": cirq_ionq.IonQTargetGateset,
         "AriaNativeGateset": cirq_ionq.AriaNativeGateset,
         "ForteNativeGateset": cirq_ionq.ForteNativeGateset,
+        "SerializedProgram": cirq_ionq.SerializedProgram,
     }

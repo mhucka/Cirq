@@ -48,6 +48,7 @@ def _class_resolver_dictionary() -> dict[str, ObjectFactory]:
     import pandas as pd
 
     import cirq
+    from cirq.circuits import InsertStrategy
     from cirq.devices import InsertionNoiseModel, NoiseModelFromNoiseProperties, ThermalNoiseModel
     from cirq.devices.noise_model import _NoNoiseModel
     from cirq.experiments import GridInteractionLayer
@@ -151,6 +152,7 @@ def _class_resolver_dictionary() -> dict[str, ObjectFactory]:
         'ISwapPowGate': cirq.ISwapPowGate,
         'IdentityGate': cirq.IdentityGate,
         'InitObsSetting': cirq.work.InitObsSetting,
+        'InsertStrategy': InsertStrategy,
         'InsertionNoiseModel': InsertionNoiseModel,
         '_InverseCompositeGate': raw_types._InverseCompositeGate,
         'KeyCondition': cirq.KeyCondition,
@@ -247,6 +249,7 @@ def _class_resolver_dictionary() -> dict[str, ObjectFactory]:
         'YPowGate': cirq.YPowGate,
         'YYPowGate': cirq.YYPowGate,
         '_ZEigenState': cirq.value.product_state._ZEigenState,
+        'ZerosSampler': cirq.ZerosSampler,
         'Zip': cirq.Zip,
         'ZipLongest': cirq.ZipLongest,
         'ZPowGate': cirq.ZPowGate,

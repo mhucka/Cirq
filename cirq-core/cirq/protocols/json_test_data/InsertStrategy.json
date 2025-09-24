@@ -1,0 +1,18 @@
+[
+  {
+    "cirq_type": "InsertStrategy",
+    "name": "NEW"
+  },
+  {
+    "cirq_type": "InsertStrategy",
+    "name": "NEW_THEN_INLINE"
+  },
+  {
+    "cirq_type": "InsertStrategy",
+    "name": "INLINE"
+  },
+  {
+    "cirq_type": "InsertStrategy",
+    "name": "EARLIEST"
+  }
+]
