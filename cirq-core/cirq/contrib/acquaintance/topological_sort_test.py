@@ -14,6 +14,7 @@
 
 from __future__ import annotations
 
+import networkx as nx
 import pytest
 
 import cirq
@@ -49,3 +50,42 @@ def test_topological_sort(circuit_dag, sorted_nodes) -> None:
     assert cca.is_topologically_sorted(circuit_dag, (node.val for node in sorted_nodes)) == (
         v.val == w.val
     )
+
+
+def test_random_topological_sort_properties():
+    # Empty graph
+    dag = nx.DiGraph()
+    assert list(cca.random_topological_sort(dag)) == []
+
+    # Single node
+    dag = nx.DiGraph()
+    dag.add_node(1)
+    assert list(cca.random_topological_sort(dag)) == [1]
+
+    # Disconnected components
+    dag = nx.DiGraph()
+    dag.add_edge(1, 2)
+    dag.add_edge(3, 4)
+    for _ in range(10):
+        result = list(cca.random_topological_sort(dag))
+        assert set(result) == {1, 2, 3, 4}
+        assert result.index(1) < result.index(2)
+        assert result.index(3) < result.index(4)
+
+    # Randomness: two independent nodes should appear in either order
+    dag = nx.DiGraph()
+    dag.add_node(1)
+    dag.add_node(2)
+    results = set()
+    for _ in range(100):
+        results.add(tuple(cca.random_topological_sort(dag)))
+    assert results == {(1, 2), (2, 1)}
+
+    # Larger DAG
+    dag = nx.DiGraph([(0, 1), (0, 2), (1, 3), (2, 3), (3, 4)])
+    for _ in range(10):
+        result = list(cca.random_topological_sort(dag))
+        assert len(result) == 5
+        assert set(result) == set(range(5))
+        for u, v in dag.edges:
+            assert result.index(u) < result.index(v)
