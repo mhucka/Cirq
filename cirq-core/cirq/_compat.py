@@ -135,35 +135,11 @@ def proper_repr(value: Any) -> str:
     """Overrides sympy and numpy returning repr strings that don't parse."""
 
     if isinstance(value, sympy.Basic):
-        # HACK: work around https://github.com/sympy/sympy/issues/16074
-        fixed_tokens = [
-            'Symbol',
-            'pi',
-            'Mul',
-            'Pow',
-            'Add',
-            'Mod',
-            'Integer',
-            'Float',
-            'Rational',
-            'GreaterThan',
-            'StrictGreaterThan',
-            'LessThan',
-            'StrictLessThan',
-            'Equality',
-            'Unequality',
-            'And',
-            'Or',
-            'Not',
-            'Xor',
-            'Indexed',
-            'IndexedBase',
-        ]
 
         class Printer(sympy.printing.repr.ReprPrinter):
             def _print(self, expr, **kwargs):
                 s = super()._print(expr, **kwargs)
-                if any(s.startswith(t) for t in fixed_tokens):
+                if getattr(getattr(expr, '__class__', None), '__module__', '').startswith('sympy'):
                     return 'sympy.' + s
                 return s
 
