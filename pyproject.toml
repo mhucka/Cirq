@@ -285,6 +285,7 @@ select = [
     "PERF102",  # incorrect-dict-iterator
     "PERF402",  # manual-list-copy
     "PERF403",  # manual-dict-comprehension
+    "PGH",  # blanket-type-ignore, blanket-noqa, invalid-mock-access
     "PIE790",  # unnecessary-placeholder, pylint unnecessary-pass
     "PLE0100",  # yield-in-init, pylint init-is-generator
     "PLE0101",  # return-in-init, pylint return-in-init
